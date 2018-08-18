@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace WindowsFormsApp2
+namespace Autolookup
 {
 
     // Must inherit Control, not Component, in order to have Handle

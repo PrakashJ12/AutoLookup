@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace WindowsFormsApp2
+namespace Autolookup
 {
     public partial class Mainform : Form
     {
@@ -69,6 +69,8 @@ namespace WindowsFormsApp2
         }
 
     }
+
+    
 
     public class ClipBoardMonitor : NativeWindow
     {
