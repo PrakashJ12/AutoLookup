@@ -29,7 +29,7 @@ namespace nslookup
 		/// 
 		/// </summary>
 		[STAThread]
-		static int Main(string[] args)
+		static int Mains(string[] args)
 		{
 			//Make sure we were passed something, otherwise return help.
 			if (args.Length < 1 || args[0].Equals("-help"))
