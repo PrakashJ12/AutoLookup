@@ -15,28 +15,46 @@ namespace Autolookup
 {
     public partial class Mainform : Form
     {
+        bool autoLookup = false;
+
         private ClipBoardMonitor cbm = null;
         public Mainform()
         {
             InitializeComponent();
+
+            this.TopMost = Properties.Settings.Default.AlwaysOnTop;
+            checkBox_onTop.Checked = Properties.Settings.Default.AlwaysOnTop;
+
+            autoLookup = Properties.Settings.Default.AutoLookup;
+            checkBox_AutoLookup.Checked = Properties.Settings.Default.AutoLookup;
+
+            //Tooltips for preference items
+            ToolTip ToolTip1 = new ToolTip();
+            ToolTip1.SetToolTip(this.checkBox_Autocopy, "This setting wont persist.");
+            ToolTip1.SetToolTip(this.checkBox_onTop, "This setting will persist between sessions.");
+            ToolTip1.SetToolTip(this.checkBox_AutoLookup, "This setting will persist between sessions.");
+
             cbm = new ClipBoardMonitor();
             cbm.NewClipboardText += cbm_NewUrl;
         }
         private void cbm_NewUrl(string clipboardText)
         {
-            if (IsValidFqdn(clipboardText))
+            if (checkBox_Autocopy.Checked)
             {
-                this.textBox_FQDN.Text = clipboardText;
+                if (IsValidFqdn(clipboardText))
+                {
+                    this.textBox_FQDN.Text = clipboardText;
+                }
+                else if (IsValidIp(clipboardText))
+                {
+                    this.textBox_IP.Text = clipboardText;
+                }
+                else
+                {
+                    Console.WriteLine("Not an FQDN or IP");
+                }
             }
-            else if(IsValidIp(clipboardText))
-            {
-                this.textBox_IP.Text = clipboardText;
-            }
-            else
-            {
-                Console.WriteLine("Not an FQDN or IP");
-            }
-                
+
         }
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
@@ -127,11 +145,23 @@ namespace Autolookup
 
         private void button_pasteIP_Click(object sender, EventArgs e)
         {
-             textBox_IP.Text = Clipboard.GetText().Trim();
+            textBox_IP.Text = Clipboard.GetText().Trim();
+        }
+
+        private void checkBox_onTop_CheckedChanged(object sender, EventArgs e)
+        {
+            this.TopMost = checkBox_onTop.Checked;
+            Properties.Settings.Default.AlwaysOnTop = checkBox_onTop.Checked; //Set the user preference for next  execution
+            Properties.Settings.Default.Save(); //Save the user preference
+        }
+
+        private void checkBox_AutoLookup_CheckedChanged(object sender, EventArgs e)
+        {
+            autoLookup = checkBox_AutoLookup.Checked;
+            Properties.Settings.Default.AutoLookup = checkBox_AutoLookup.Checked; //Set the user preference for next  execution
+            Properties.Settings.Default.Save(); //Save the user preference
         }
     }
-
-
 
     public class ClipBoardMonitor : NativeWindow
     {
@@ -206,14 +236,14 @@ namespace Autolookup
             String patternIp = "\\d\\d?\\d?\\.\\d\\d?\\d?\\.\\d\\d?\\d?\\.\\d\\d?\\d?";
             bool isMatchIp = Regex.IsMatch(txt, patternIp);
 
-            if((isMatchFqdn || isMatchIp) && !(isMatchIp && isMatchFqdn))
+            if ((isMatchFqdn || isMatchIp) && !(isMatchIp && isMatchFqdn))
             {
                 return true;
             }
             return false;
         }
 
-        
+
 
     }
 }

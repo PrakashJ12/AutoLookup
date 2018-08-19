@@ -158,6 +158,7 @@
             this.checkBox_onTop.TabIndex = 6;
             this.checkBox_onTop.Text = "Always on Top";
             this.checkBox_onTop.UseVisualStyleBackColor = true;
+            this.checkBox_onTop.CheckedChanged += new System.EventHandler(this.checkBox_onTop_CheckedChanged);
             // 
             // checkBox_AutoLookup
             // 
@@ -169,6 +170,7 @@
             this.checkBox_AutoLookup.TabIndex = 1;
             this.checkBox_AutoLookup.Text = "Auto Lookup";
             this.checkBox_AutoLookup.UseVisualStyleBackColor = true;
+            this.checkBox_AutoLookup.CheckedChanged += new System.EventHandler(this.checkBox_AutoLookup_CheckedChanged);
             // 
             // checkBox_Autocopy
             // 
@@ -191,7 +193,7 @@
             this.Controls.Add(this.groupBox1);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Mainform";
-            this.Text = "EY";
+            this.Text = "AutoLookup";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
