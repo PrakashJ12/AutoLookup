@@ -161,6 +161,8 @@ namespace Autolookup
             Properties.Settings.Default.AutoLookup = checkBox_AutoLookup.Checked; //Set the user preference for next  execution
             Properties.Settings.Default.Save(); //Save the user preference
         }
+
+     
     }
 
     public class ClipBoardMonitor : NativeWindow
