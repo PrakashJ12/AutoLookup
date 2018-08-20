@@ -33,6 +33,11 @@
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label_resultPing = new System.Windows.Forms.Label();
+            this.label_resultLookup = new System.Windows.Forms.Label();
+            this.label_resultReverse = new System.Windows.Forms.Label();
             this.button_pasteIP = new System.Windows.Forms.Button();
             this.button_pasteFQDN = new System.Windows.Forms.Button();
             this.button_Lookup = new System.Windows.Forms.Button();
@@ -44,11 +49,6 @@
             this.checkBox_onTop = new System.Windows.Forms.CheckBox();
             this.checkBox_AutoLookup = new System.Windows.Forms.CheckBox();
             this.checkBox_Autocopy = new System.Windows.Forms.CheckBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label_resultPing = new System.Windows.Forms.Label();
-            this.label_resultLookup = new System.Windows.Forms.Label();
-            this.label_resultReverse = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox_results.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -100,6 +100,7 @@
             // 
             this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel1.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3F));
@@ -130,11 +131,66 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "Ping";
             // 
+            // label4
+            // 
+            this.label4.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(504, 14);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(129, 37);
+            this.label4.TabIndex = 1;
+            this.label4.Text = "Lookup";
+            // 
+            // label5
+            // 
+            this.label5.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(879, 14);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(139, 37);
+            this.label5.TabIndex = 2;
+            this.label5.Text = "Reverse";
+            // 
+            // label_resultPing
+            // 
+            this.label_resultPing.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label_resultPing.AutoSize = true;
+            this.label_resultPing.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_resultPing.Location = new System.Drawing.Point(131, 147);
+            this.label_resultPing.Name = "label_resultPing";
+            this.label_resultPing.Size = new System.Drawing.Size(118, 31);
+            this.label_resultPing.TabIndex = 3;
+            this.label_resultPing.Text = "Success";
+            // 
+            // label_resultLookup
+            // 
+            this.label_resultLookup.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label_resultLookup.AutoSize = true;
+            this.label_resultLookup.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_resultLookup.Location = new System.Drawing.Point(510, 147);
+            this.label_resultLookup.Name = "label_resultLookup";
+            this.label_resultLookup.Size = new System.Drawing.Size(118, 31);
+            this.label_resultLookup.TabIndex = 4;
+            this.label_resultLookup.Text = "Success";
+            // 
+            // label_resultReverse
+            // 
+            this.label_resultReverse.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label_resultReverse.AutoSize = true;
+            this.label_resultReverse.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_resultReverse.Location = new System.Drawing.Point(890, 147);
+            this.label_resultReverse.Name = "label_resultReverse";
+            this.label_resultReverse.Size = new System.Drawing.Size(118, 31);
+            this.label_resultReverse.TabIndex = 4;
+            this.label_resultReverse.Text = "Success";
+            // 
             // button_pasteIP
             // 
-            this.button_pasteIP.Location = new System.Drawing.Point(524, 109);
+            this.button_pasteIP.Location = new System.Drawing.Point(524, 104);
             this.button_pasteIP.Name = "button_pasteIP";
-            this.button_pasteIP.Size = new System.Drawing.Size(111, 43);
+            this.button_pasteIP.Size = new System.Drawing.Size(134, 48);
             this.button_pasteIP.TabIndex = 7;
             this.button_pasteIP.Text = "Paste";
             this.button_pasteIP.UseVisualStyleBackColor = true;
@@ -142,9 +198,9 @@
             // 
             // button_pasteFQDN
             // 
-            this.button_pasteFQDN.Location = new System.Drawing.Point(802, 49);
+            this.button_pasteFQDN.Location = new System.Drawing.Point(964, 43);
             this.button_pasteFQDN.Name = "button_pasteFQDN";
-            this.button_pasteFQDN.Size = new System.Drawing.Size(111, 43);
+            this.button_pasteFQDN.Size = new System.Drawing.Size(134, 49);
             this.button_pasteFQDN.TabIndex = 6;
             this.button_pasteFQDN.Text = "Paste";
             this.button_pasteFQDN.UseVisualStyleBackColor = true;
@@ -187,7 +243,7 @@
             this.textBox_FQDN.Location = new System.Drawing.Point(136, 44);
             this.textBox_FQDN.Margin = new System.Windows.Forms.Padding(4);
             this.textBox_FQDN.Name = "textBox_FQDN";
-            this.textBox_FQDN.Size = new System.Drawing.Size(659, 50);
+            this.textBox_FQDN.Size = new System.Drawing.Size(821, 50);
             this.textBox_FQDN.TabIndex = 2;
             this.textBox_FQDN.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
@@ -207,11 +263,11 @@
             this.groupBox2.Controls.Add(this.checkBox_onTop);
             this.groupBox2.Controls.Add(this.checkBox_AutoLookup);
             this.groupBox2.Controls.Add(this.checkBox_Autocopy);
-            this.groupBox2.Location = new System.Drawing.Point(956, 32);
+            this.groupBox2.Location = new System.Drawing.Point(956, 118);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox2.Size = new System.Drawing.Size(215, 163);
+            this.groupBox2.Size = new System.Drawing.Size(215, 147);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Settings";
@@ -251,61 +307,6 @@
             this.checkBox_Autocopy.TabIndex = 0;
             this.checkBox_Autocopy.Text = "Autocopy";
             this.checkBox_Autocopy.UseVisualStyleBackColor = true;
-            // 
-            // label4
-            // 
-            this.label4.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(504, 14);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(129, 37);
-            this.label4.TabIndex = 1;
-            this.label4.Text = "Lookup";
-            // 
-            // label5
-            // 
-            this.label5.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(879, 14);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(139, 37);
-            this.label5.TabIndex = 2;
-            this.label5.Text = "Reverse";
-            // 
-            // label_resultPing
-            // 
-            this.label_resultPing.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label_resultPing.AutoSize = true;
-            this.label_resultPing.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_resultPing.Location = new System.Drawing.Point(130, 148);
-            this.label_resultPing.Name = "label_resultPing";
-            this.label_resultPing.Size = new System.Drawing.Size(118, 31);
-            this.label_resultPing.TabIndex = 3;
-            this.label_resultPing.Text = "Success";
-            // 
-            // label_resultLookup
-            // 
-            this.label_resultLookup.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label_resultLookup.AutoSize = true;
-            this.label_resultLookup.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_resultLookup.Location = new System.Drawing.Point(509, 148);
-            this.label_resultLookup.Name = "label_resultLookup";
-            this.label_resultLookup.Size = new System.Drawing.Size(118, 31);
-            this.label_resultLookup.TabIndex = 4;
-            this.label_resultLookup.Text = "Success";
-            // 
-            // label_resultReverse
-            // 
-            this.label_resultReverse.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label_resultReverse.AutoSize = true;
-            this.label_resultReverse.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_resultReverse.Location = new System.Drawing.Point(890, 148);
-            this.label_resultReverse.Name = "label_resultReverse";
-            this.label_resultReverse.Size = new System.Drawing.Size(118, 31);
-            this.label_resultReverse.TabIndex = 4;
-            this.label_resultReverse.Text = "Success";
             // 
             // Mainform
             // 
