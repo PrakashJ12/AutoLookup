@@ -1,27 +1,32 @@
-﻿using System;
+﻿using AutoLookup.Properties;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Autolookup
+namespace AutoLookup
 {
     public partial class Mainform : Form
     {
         bool autoLookup = false;
 
+        bool pingSuccess = false;
+
         private ClipBoardMonitor cbm = null;
+        BackgroundWorker backgroundWorker_Ping = new BackgroundWorker();
         public Mainform()
         {
             InitializeComponent();
-
+            
             this.TopMost = Properties.Settings.Default.AlwaysOnTop;
             checkBox_onTop.Checked = Properties.Settings.Default.AlwaysOnTop;
 
@@ -36,7 +41,74 @@ namespace Autolookup
 
             cbm = new ClipBoardMonitor();
             cbm.NewClipboardText += cbm_NewUrl;
+
+            backgroundWorker_Ping.WorkerSupportsCancellation = false;
+            backgroundWorker_Ping.WorkerReportsProgress = true;
+            backgroundWorker_Ping.DoWork += Ping_DoWork;
+            backgroundWorker_Ping.RunWorkerCompleted += Ping_Completed;
+            backgroundWorker_Ping.ProgressChanged += Ping_ProgressChanged;
+
+
+
         }
+
+        private void Ping_Completed(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (pingSuccess) {
+                pictureBox_ping.Image = Resources.success;
+            }
+            else
+            {
+                pictureBox_ping.Image = Resources.failed;
+            }
+            
+        }
+
+        private void Ping_DoWork(object sender, DoWorkEventArgs e)
+        {
+            int defaultTimout = 1500;
+            int pingAttempt = 1;
+            pingSuccess = false;
+            do
+            {
+                backgroundWorker_Ping.ReportProgress(pingAttempt);
+                pingSuccess = doPing(textBox_FQDN.Text, defaultTimout * pingAttempt);
+                pingAttempt++;
+            } while (pingAttempt < 4 && pingSuccess == false);
+             
+        }
+        
+        private bool doPing(string fqdn, int timeout)
+        {
+            bool singlePingSuccess = false;
+            Ping pinger = null;
+
+            try
+            {
+                pinger = new Ping();
+                PingReply reply = pinger.Send(fqdn, timeout);
+                singlePingSuccess = reply.Status == IPStatus.Success;
+            }
+            catch (PingException)
+            {
+                // Discard PingExceptions and return false;
+            }
+            finally
+            {
+                if (pinger != null)
+                {
+                    pinger.Dispose();
+                }
+            }
+
+            return singlePingSuccess;
+        }
+
+        private void Ping_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            label_resultPing.Text = "Ping: " + e.ProgressPercentage;
+        }
+
         private void cbm_NewUrl(string clipboardText)
         {
             if (checkBox_Autocopy.Checked)
@@ -63,40 +135,41 @@ namespace Autolookup
 
         private void button_Lookup_Click(object sender, EventArgs e)
         {
+            pictureBox_ping.Image = Resources.progress;
+            backgroundWorker_Ping.RunWorkerAsync();
+            ////The IP or Host Entry to lookup
+            //IPHostEntry ipEntry;
 
-            //The IP or Host Entry to lookup
-            IPHostEntry ipEntry;
+            ////The IP Address Array. Holds an array of resolved Host Names.
+            //IPAddress[] ipAddr;
+            //String fqdn = textBox_FQDN.Text.Trim();
+            ////Value of alpha characters
+            //char[] alpha = "aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ-".ToCharArray();
 
-            //The IP Address Array. Holds an array of resolved Host Names.
-            IPAddress[] ipAddr;
-            String fqdn = textBox_FQDN.Text.Trim();
-            //Value of alpha characters
-            char[] alpha = "aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ-".ToCharArray();
+            ////If alpha characters exist we know we are doing a forward lookup
+            //if (fqdn.IndexOfAny(alpha) != -1)
+            //{
+            //    ipEntry = Dns.GetHostByName(textBox_FQDN.Text);
 
-            //If alpha characters exist we know we are doing a forward lookup
-            if (fqdn.IndexOfAny(alpha) != -1)
-            {
-                ipEntry = Dns.GetHostByName(textBox_FQDN.Text);
+            //    ipAddr = ipEntry.AddressList;
 
-                ipAddr = ipEntry.AddressList;
+            //    Console.WriteLine("\nHost Name : " + textBox_FQDN.Text);
 
-                Console.WriteLine("\nHost Name : " + textBox_FQDN.Text);
+            //    int i = 0;
+            //    int len = ipAddr.Length;
 
-                int i = 0;
-                int len = ipAddr.Length;
-
-                for (i = 0; i < len; i++)
-                {
-                    Console.WriteLine("Address {0} : {1} ", i, ipAddr[i].ToString());
-                }
+            //    for (i = 0; i < len; i++)
+            //    {
+            //        Console.WriteLine("Address {0} : {1} ", i, ipAddr[i].ToString());
+            //    }
 
 
-                //return 0;
-            }
-            else
-            {
-                //TODO Error case
-            }
+            //    //return 0;
+            //}
+            //else
+            //{
+            //    //TODO Error case
+            //}
         }
 
         public bool ValidateIPv4(string ipString)
@@ -161,8 +234,7 @@ namespace Autolookup
             Properties.Settings.Default.AutoLookup = checkBox_AutoLookup.Checked; //Set the user preference for next  execution
             Properties.Settings.Default.Save(); //Save the user preference
         }
-
-     
+        
     }
 
     public class ClipBoardMonitor : NativeWindow
