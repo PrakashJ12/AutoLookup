@@ -39,6 +39,7 @@
             this.label_resultLookup = new System.Windows.Forms.Label();
             this.label_resultReverse = new System.Windows.Forms.Label();
             this.pictureBox_ping = new System.Windows.Forms.PictureBox();
+            this.pictureBox_lookup = new System.Windows.Forms.PictureBox();
             this.button_pasteIP = new System.Windows.Forms.Button();
             this.button_pasteFQDN = new System.Windows.Forms.Button();
             this.button_Lookup = new System.Windows.Forms.Button();
@@ -54,6 +55,7 @@
             this.groupBox_results.SuspendLayout();
             this.tableLayoutPanel_singleLookup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_ping)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_lookup)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -117,6 +119,7 @@
             this.tableLayoutPanel_singleLookup.Controls.Add(this.label_resultLookup, 1, 2);
             this.tableLayoutPanel_singleLookup.Controls.Add(this.label_resultReverse, 2, 2);
             this.tableLayoutPanel_singleLookup.Controls.Add(this.pictureBox_ping, 0, 1);
+            this.tableLayoutPanel_singleLookup.Controls.Add(this.pictureBox_lookup, 1, 1);
             this.tableLayoutPanel_singleLookup.Location = new System.Drawing.Point(8, 138);
             this.tableLayoutPanel_singleLookup.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel_singleLookup.Name = "tableLayoutPanel_singleLookup";
@@ -208,6 +211,16 @@
             this.pictureBox_ping.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_ping.TabIndex = 5;
             this.pictureBox_ping.TabStop = false;
+            // 
+            // pictureBox_lookup
+            // 
+            this.pictureBox_lookup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.pictureBox_lookup.Location = new System.Drawing.Point(538, 68);
+            this.pictureBox_lookup.Name = "pictureBox_lookup";
+            this.pictureBox_lookup.Size = new System.Drawing.Size(62, 62);
+            this.pictureBox_lookup.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_lookup.TabIndex = 5;
+            this.pictureBox_lookup.TabStop = false;
             // 
             // button_pasteIP
             // 
@@ -349,6 +362,7 @@
             this.tableLayoutPanel_singleLookup.ResumeLayout(false);
             this.tableLayoutPanel_singleLookup.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_ping)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_lookup)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
@@ -379,6 +393,7 @@
         private System.Windows.Forms.Label label_resultLookup;
         private System.Windows.Forms.Label label_resultReverse;
         private System.Windows.Forms.PictureBox pictureBox_ping;
+        private System.Windows.Forms.PictureBox pictureBox_lookup;
     }
 }
 

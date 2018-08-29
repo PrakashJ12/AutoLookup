@@ -20,9 +20,12 @@ namespace AutoLookup
         bool autoLookup = false;
 
         bool pingSuccess = false;
+        bool lookupSuccess = false;
 
         private ClipBoardMonitor cbm = null;
         BackgroundWorker backgroundWorker_Ping = new BackgroundWorker();
+        BackgroundWorker backgroundWorker_Lookup = new BackgroundWorker();
+        BackgroundWorker backgroundWorker_ReverseLookup = new BackgroundWorker();
         public Mainform()
         {
             InitializeComponent();
@@ -48,8 +51,92 @@ namespace AutoLookup
             backgroundWorker_Ping.RunWorkerCompleted += Ping_Completed;
             backgroundWorker_Ping.ProgressChanged += Ping_ProgressChanged;
 
+            backgroundWorker_Lookup.WorkerSupportsCancellation = false;
+            backgroundWorker_Lookup.WorkerReportsProgress = true;
+            backgroundWorker_Lookup.DoWork += Lookup_DoWork;
+            backgroundWorker_Lookup.ProgressChanged += Lookup_ProgressChanged;
+            backgroundWorker_Lookup.RunWorkerCompleted += Lookup_Completed;
+            
 
+            backgroundWorker_ReverseLookup.WorkerSupportsCancellation = false;
+            backgroundWorker_ReverseLookup.WorkerReportsProgress = true;
+            //backgroundWorker_ReverseLookup.DoWork += Ping_DoWork;
+            //backgroundWorker_ReverseLookup.ProgressChanged += Ping_ProgressChanged;
+            //backgroundWorker_ReverseLookup.RunWorkerCompleted += Ping_Completed;
+        }
 
+        private void Lookup_DoWork(object sender, DoWorkEventArgs e)
+        {
+            
+            int pingAttempt = 1;
+            lookupSuccess = false;
+            do
+            {
+                backgroundWorker_Lookup.ReportProgress(pingAttempt);
+                lookupSuccess = Lookup(textBox_FQDN.Text, textBox_IP.Text);
+                pingAttempt++;
+            } while (pingAttempt < 4 && lookupSuccess == false);
+
+        }
+
+        private void Lookup_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            label_resultLookup.Text = "Lookup: " + e.ProgressPercentage;
+        }
+
+        private void Lookup_Completed(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (lookupSuccess)
+            {
+                pictureBox_lookup.Image = Resources.success;
+            }
+            else
+            {
+                pictureBox_lookup.Image = Resources.failed;
+            }
+        }
+
+        [STAThread]
+        static bool Lookup(string fqdn, string ip)
+        {
+            try
+            {
+                //The IP or Host Entry to lookup
+                IPHostEntry ipEntry;
+
+                //The IP Address Array. Holds an array of resolved Host Names.
+                IPAddress[] ipAddr;
+
+                //Value of alpha characters
+                char[] alpha = "aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ-".ToCharArray();
+
+                ipEntry = Dns.GetHostEntry(fqdn);
+
+                ipAddr = ipEntry.AddressList;
+
+                foreach (var ipResult in ipAddr)
+                {
+                    if (ipResult.ToString().Equals(ip))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch (System.Net.Sockets.SocketException se)
+            {
+                // The system had problems resolving the address passed
+                Console.WriteLine(se.Message.ToString());
+                return false;
+
+            }
+            catch (System.FormatException fe)
+            {
+                // Non unicode chars were probably passed 
+                Console.WriteLine(fe.Message.ToString());
+                return false;
+
+            }
         }
 
         private void Ping_Completed(object sender, RunWorkerCompletedEventArgs e)
@@ -61,7 +148,8 @@ namespace AutoLookup
             {
                 pictureBox_ping.Image = Resources.failed;
             }
-            
+            pictureBox_lookup.Image = Resources.progress;
+            backgroundWorker_Lookup.RunWorkerAsync();
         }
 
         private void Ping_DoWork(object sender, DoWorkEventArgs e)
@@ -135,6 +223,10 @@ namespace AutoLookup
 
         private void button_Lookup_Click(object sender, EventArgs e)
         {
+            pictureBox_lookup.Image = null;
+            //pictureBox_reverseLookup.Image = Resources.progress;
+
+
             pictureBox_ping.Image = Resources.progress;
             backgroundWorker_Ping.RunWorkerAsync();
             ////The IP or Host Entry to lookup
