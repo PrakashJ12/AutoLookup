@@ -23,6 +23,8 @@ namespace AutoLookup
         bool lookupSuccess = false;
         bool reverseLookupSuccess = false;
 
+        bool tempDisableCopy = false;
+
         private ClipBoardMonitor cbm = null;
         BackgroundWorker backgroundWorker_Ping = new BackgroundWorker();
         BackgroundWorker backgroundWorker_Lookup = new BackgroundWorker();
@@ -30,7 +32,7 @@ namespace AutoLookup
         public Mainform()
         {
             InitializeComponent();
-            
+
             this.TopMost = Properties.Settings.Default.AlwaysOnTop;
             checkBox_onTop.Checked = Properties.Settings.Default.AlwaysOnTop;
 
@@ -41,25 +43,29 @@ namespace AutoLookup
             ToolTip ToolTip1 = new ToolTip();
             ToolTip1.SetToolTip(this.checkBox_Autocopy, "This setting wont persist.");
             ToolTip1.SetToolTip(this.checkBox_onTop, "This setting will persist between sessions.");
-            ToolTip1.SetToolTip(this.checkBox_AutoLookup, "This setting will persist between sessions.");
+            ToolTip1.SetToolTip(this.checkBox_AutoLookup, "Not Implemented.");
+
+            label_resultLookup.Text = "";
+            label_resultPing.Text = "";
+            label_resultReverse.Text = "";
 
             cbm = new ClipBoardMonitor();
             cbm.NewClipboardText += cbm_NewUrl;
 
-            backgroundWorker_Ping.WorkerSupportsCancellation = false;
+            backgroundWorker_Ping.WorkerSupportsCancellation = true;
             backgroundWorker_Ping.WorkerReportsProgress = true;
             backgroundWorker_Ping.DoWork += Ping_DoWork;
             backgroundWorker_Ping.RunWorkerCompleted += Ping_Completed;
             backgroundWorker_Ping.ProgressChanged += Ping_ProgressChanged;
 
-            backgroundWorker_Lookup.WorkerSupportsCancellation = false;
+            backgroundWorker_Lookup.WorkerSupportsCancellation = true;
             backgroundWorker_Lookup.WorkerReportsProgress = true;
             backgroundWorker_Lookup.DoWork += Lookup_DoWork;
             backgroundWorker_Lookup.ProgressChanged += Lookup_ProgressChanged;
             backgroundWorker_Lookup.RunWorkerCompleted += Lookup_Completed;
-            
 
-            backgroundWorker_ReverseLookup.WorkerSupportsCancellation = false;
+
+            backgroundWorker_ReverseLookup.WorkerSupportsCancellation = true;
             backgroundWorker_ReverseLookup.WorkerReportsProgress = true;
             backgroundWorker_ReverseLookup.DoWork += Reverse_DoWork;
             backgroundWorker_ReverseLookup.ProgressChanged += Reverse_ProgressChanged;
@@ -76,24 +82,29 @@ namespace AutoLookup
                 backgroundWorker_ReverseLookup.ReportProgress(pingAttempt);
                 reverseLookupSuccess = Reverse(textBox_IP.Text, textBox_FQDN.Text);
                 pingAttempt++;
-            } while (pingAttempt < 4 && reverseLookupSuccess == false);
-
+            } while (pingAttempt < 4 && reverseLookupSuccess == false && !backgroundWorker_ReverseLookup.CancellationPending);
+            if (backgroundWorker_ReverseLookup.CancellationPending) e.Cancel = true;
         }
 
         private void Reverse_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            label_resultReverse.Text = "Attempt: " + e.ProgressPercentage;
+            if (!backgroundWorker_ReverseLookup.CancellationPending)
+                label_resultReverse.Text = "Attempt: " + e.ProgressPercentage;
         }
 
         private void Reverse_Completed(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (reverseLookupSuccess)
+            if (!e.Cancelled)
             {
-                pictureBox_reverseLookup.Image = Resources.success;
-            }
-            else
-            {
-                pictureBox_reverseLookup.Image = Resources.failed;
+                if (reverseLookupSuccess)
+                {
+                    pictureBox_reverseLookup.Image = Resources.success;
+                }
+                else
+                {
+                    pictureBox_reverseLookup.Image = Resources.failed;
+                }
+                tempDisableCopy = false;
             }
         }
 
@@ -101,7 +112,7 @@ namespace AutoLookup
         static bool Reverse(string ip, string fqdn)
         {
             IPHostEntry ipEntry = Dns.GetHostEntry(ip);
-            
+
             if (ipEntry.HostName.Equals(fqdn))
             {
                 return true;
@@ -110,9 +121,9 @@ namespace AutoLookup
             return false;
         }
 
-            private void Lookup_DoWork(object sender, DoWorkEventArgs e)
+        private void Lookup_DoWork(object sender, DoWorkEventArgs e)
         {
-            
+
             int pingAttempt = 1;
             lookupSuccess = false;
             do
@@ -120,27 +131,32 @@ namespace AutoLookup
                 backgroundWorker_Lookup.ReportProgress(pingAttempt);
                 lookupSuccess = Lookup(textBox_FQDN.Text, textBox_IP.Text);
                 pingAttempt++;
-            } while (pingAttempt < 4 && lookupSuccess == false);
+            } while (pingAttempt < 4 && lookupSuccess == false && !backgroundWorker_Lookup.CancellationPending);
 
+            if (backgroundWorker_Lookup.CancellationPending) e.Cancel = true;
         }
 
         private void Lookup_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            label_resultLookup.Text = "Attempt: " + e.ProgressPercentage;
+            if (!backgroundWorker_Lookup.CancellationPending)
+                label_resultLookup.Text = "Attempt: " + e.ProgressPercentage;
         }
 
         private void Lookup_Completed(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (lookupSuccess)
+            if (!e.Cancelled)
             {
-                pictureBox_lookup.Image = Resources.success;
+                if (lookupSuccess)
+                {
+                    pictureBox_lookup.Image = Resources.success;
+                }
+                else
+                {
+                    pictureBox_lookup.Image = Resources.failed;
+                }
+                pictureBox_reverseLookup.Image = Resources.progress;
+                backgroundWorker_ReverseLookup.RunWorkerAsync();
             }
-            else
-            {
-                pictureBox_lookup.Image = Resources.failed;
-            }
-            pictureBox_reverseLookup.Image = Resources.progress;
-            backgroundWorker_ReverseLookup.RunWorkerAsync();
         }
 
         [STAThread]
@@ -188,15 +204,19 @@ namespace AutoLookup
 
         private void Ping_Completed(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (pingSuccess) {
-                pictureBox_ping.Image = Resources.success;
-            }
-            else
+            if (!e.Cancelled)
             {
-                pictureBox_ping.Image = Resources.failed;
+                if (pingSuccess)
+                {
+                    pictureBox_ping.Image = Resources.success;
+                }
+                else
+                {
+                    pictureBox_ping.Image = Resources.failed;
+                }
+                pictureBox_lookup.Image = Resources.progress;
+                backgroundWorker_Lookup.RunWorkerAsync();
             }
-            pictureBox_lookup.Image = Resources.progress;
-            backgroundWorker_Lookup.RunWorkerAsync();
         }
 
         private void Ping_DoWork(object sender, DoWorkEventArgs e)
@@ -209,10 +229,11 @@ namespace AutoLookup
                 backgroundWorker_Ping.ReportProgress(pingAttempt);
                 pingSuccess = doPing(textBox_FQDN.Text, defaultTimout * pingAttempt);
                 pingAttempt++;
-            } while (pingAttempt < 4 && pingSuccess == false);
-             
+            } while (pingAttempt < 4 && pingSuccess == false && !backgroundWorker_Ping.CancellationPending);
+
+            if (backgroundWorker_Ping.CancellationPending) e.Cancel = true;
         }
-        
+
         private bool doPing(string fqdn, int timeout)
         {
             bool singlePingSuccess = false;
@@ -241,12 +262,13 @@ namespace AutoLookup
 
         private void Ping_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            label_resultPing.Text = "Ping: " + e.ProgressPercentage;
+            if (!backgroundWorker_Ping.CancellationPending)
+                label_resultPing.Text = "Ping: " + e.ProgressPercentage;
         }
 
         private void cbm_NewUrl(string clipboardText)
         {
-            if (checkBox_Autocopy.Checked)
+            if (checkBox_Autocopy.Checked && !tempDisableCopy)
             {
                 if (IsValidFqdn(clipboardText))
                 {
@@ -263,17 +285,16 @@ namespace AutoLookup
             }
 
         }
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
+        
 
         private void button_Lookup_Click(object sender, EventArgs e)
         {
+            tempDisableCopy = true;
             pictureBox_lookup.Image = null;
             pictureBox_reverseLookup.Image = null;
 
             pictureBox_ping.Image = Resources.progress;
+
             backgroundWorker_Ping.RunWorkerAsync();
         }
 
@@ -339,7 +360,44 @@ namespace AutoLookup
             Properties.Settings.Default.AutoLookup = checkBox_AutoLookup.Checked; //Set the user preference for next  execution
             Properties.Settings.Default.Save(); //Save the user preference
         }
-        
+
+        private void button_ClearCancel_Click(object sender, EventArgs e)
+        {
+            backgroundWorker_Ping.CancelAsync();
+            backgroundWorker_Lookup.CancelAsync();
+            backgroundWorker_ReverseLookup.CancelAsync();
+
+            pictureBox_lookup.Image = null;
+            pictureBox_reverseLookup.Image = null;
+            pictureBox_ping.Image = null;
+
+            //textBox_IP.Text = "";
+            //textBox_FQDN.Text = "";
+
+            label_resultPing.Text = "";
+            label_resultLookup.Text = "";
+            label_resultReverse.Text = "";
+
+            tempDisableCopy = false;
+        }
+
+        private void textBox_FQDN_TextChanged(object sender, EventArgs e)
+        {
+            backgroundWorker_Ping.CancelAsync();
+            backgroundWorker_Lookup.CancelAsync();
+            backgroundWorker_ReverseLookup.CancelAsync();
+
+            pictureBox_lookup.Image = null;
+            pictureBox_reverseLookup.Image = null;
+            pictureBox_ping.Image = null;
+
+            //textBox_IP.Text = "";
+            //textBox_FQDN.Text = "";
+
+            label_resultPing.Text = "";
+            label_resultLookup.Text = "";
+            label_resultReverse.Text = "";
+        }
     }
 
     public class ClipBoardMonitor : NativeWindow
