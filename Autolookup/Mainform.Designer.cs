@@ -51,12 +51,14 @@
             this.checkBox_onTop = new System.Windows.Forms.CheckBox();
             this.checkBox_AutoLookup = new System.Windows.Forms.CheckBox();
             this.checkBox_Autocopy = new System.Windows.Forms.CheckBox();
+            this.pictureBox_reverseLookup = new System.Windows.Forms.PictureBox();
             this.groupBox1.SuspendLayout();
             this.groupBox_results.SuspendLayout();
             this.tableLayoutPanel_singleLookup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_ping)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_lookup)).BeginInit();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_reverseLookup)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -120,6 +122,7 @@
             this.tableLayoutPanel_singleLookup.Controls.Add(this.label_resultReverse, 2, 2);
             this.tableLayoutPanel_singleLookup.Controls.Add(this.pictureBox_ping, 0, 1);
             this.tableLayoutPanel_singleLookup.Controls.Add(this.pictureBox_lookup, 1, 1);
+            this.tableLayoutPanel_singleLookup.Controls.Add(this.pictureBox_reverseLookup, 2, 1);
             this.tableLayoutPanel_singleLookup.Location = new System.Drawing.Point(8, 138);
             this.tableLayoutPanel_singleLookup.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel_singleLookup.Name = "tableLayoutPanel_singleLookup";
@@ -347,6 +350,16 @@
             this.checkBox_Autocopy.Text = "Autocopy";
             this.checkBox_Autocopy.UseVisualStyleBackColor = true;
             // 
+            // pictureBox_reverseLookup
+            // 
+            this.pictureBox_reverseLookup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.pictureBox_reverseLookup.Location = new System.Drawing.Point(918, 68);
+            this.pictureBox_reverseLookup.Name = "pictureBox_reverseLookup";
+            this.pictureBox_reverseLookup.Size = new System.Drawing.Size(62, 62);
+            this.pictureBox_reverseLookup.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_reverseLookup.TabIndex = 5;
+            this.pictureBox_reverseLookup.TabStop = false;
+            // 
             // Mainform
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
@@ -365,6 +378,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_lookup)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_reverseLookup)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -394,6 +408,7 @@
         private System.Windows.Forms.Label label_resultReverse;
         private System.Windows.Forms.PictureBox pictureBox_ping;
         private System.Windows.Forms.PictureBox pictureBox_lookup;
+        private System.Windows.Forms.PictureBox pictureBox_reverseLookup;
     }
 }
 

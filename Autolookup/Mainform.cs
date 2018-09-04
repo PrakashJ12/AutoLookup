@@ -21,6 +21,7 @@ namespace AutoLookup
 
         bool pingSuccess = false;
         bool lookupSuccess = false;
+        bool reverseLookupSuccess = false;
 
         private ClipBoardMonitor cbm = null;
         BackgroundWorker backgroundWorker_Ping = new BackgroundWorker();
@@ -60,12 +61,56 @@ namespace AutoLookup
 
             backgroundWorker_ReverseLookup.WorkerSupportsCancellation = false;
             backgroundWorker_ReverseLookup.WorkerReportsProgress = true;
-            //backgroundWorker_ReverseLookup.DoWork += Ping_DoWork;
-            //backgroundWorker_ReverseLookup.ProgressChanged += Ping_ProgressChanged;
-            //backgroundWorker_ReverseLookup.RunWorkerCompleted += Ping_Completed;
+            backgroundWorker_ReverseLookup.DoWork += Reverse_DoWork;
+            backgroundWorker_ReverseLookup.ProgressChanged += Reverse_ProgressChanged;
+            backgroundWorker_ReverseLookup.RunWorkerCompleted += Reverse_Completed;
         }
 
-        private void Lookup_DoWork(object sender, DoWorkEventArgs e)
+        private void Reverse_DoWork(object sender, DoWorkEventArgs e)
+        {
+
+            int pingAttempt = 1;
+            reverseLookupSuccess = false;
+            do
+            {
+                backgroundWorker_ReverseLookup.ReportProgress(pingAttempt);
+                reverseLookupSuccess = Reverse(textBox_IP.Text, textBox_FQDN.Text);
+                pingAttempt++;
+            } while (pingAttempt < 4 && reverseLookupSuccess == false);
+
+        }
+
+        private void Reverse_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            label_resultReverse.Text = "Attempt: " + e.ProgressPercentage;
+        }
+
+        private void Reverse_Completed(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (reverseLookupSuccess)
+            {
+                pictureBox_reverseLookup.Image = Resources.success;
+            }
+            else
+            {
+                pictureBox_reverseLookup.Image = Resources.failed;
+            }
+        }
+
+        [STAThread]
+        static bool Reverse(string ip, string fqdn)
+        {
+            IPHostEntry ipEntry = Dns.GetHostEntry(ip);
+            
+            if (ipEntry.HostName.Equals(fqdn))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+            private void Lookup_DoWork(object sender, DoWorkEventArgs e)
         {
             
             int pingAttempt = 1;
@@ -81,7 +126,7 @@ namespace AutoLookup
 
         private void Lookup_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            label_resultLookup.Text = "Lookup: " + e.ProgressPercentage;
+            label_resultLookup.Text = "Attempt: " + e.ProgressPercentage;
         }
 
         private void Lookup_Completed(object sender, RunWorkerCompletedEventArgs e)
@@ -94,6 +139,8 @@ namespace AutoLookup
             {
                 pictureBox_lookup.Image = Resources.failed;
             }
+            pictureBox_reverseLookup.Image = Resources.progress;
+            backgroundWorker_ReverseLookup.RunWorkerAsync();
         }
 
         [STAThread]
@@ -224,44 +271,10 @@ namespace AutoLookup
         private void button_Lookup_Click(object sender, EventArgs e)
         {
             pictureBox_lookup.Image = null;
-            //pictureBox_reverseLookup.Image = Resources.progress;
-
+            pictureBox_reverseLookup.Image = null;
 
             pictureBox_ping.Image = Resources.progress;
             backgroundWorker_Ping.RunWorkerAsync();
-            ////The IP or Host Entry to lookup
-            //IPHostEntry ipEntry;
-
-            ////The IP Address Array. Holds an array of resolved Host Names.
-            //IPAddress[] ipAddr;
-            //String fqdn = textBox_FQDN.Text.Trim();
-            ////Value of alpha characters
-            //char[] alpha = "aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ-".ToCharArray();
-
-            ////If alpha characters exist we know we are doing a forward lookup
-            //if (fqdn.IndexOfAny(alpha) != -1)
-            //{
-            //    ipEntry = Dns.GetHostByName(textBox_FQDN.Text);
-
-            //    ipAddr = ipEntry.AddressList;
-
-            //    Console.WriteLine("\nHost Name : " + textBox_FQDN.Text);
-
-            //    int i = 0;
-            //    int len = ipAddr.Length;
-
-            //    for (i = 0; i < len; i++)
-            //    {
-            //        Console.WriteLine("Address {0} : {1} ", i, ipAddr[i].ToString());
-            //    }
-
-
-            //    //return 0;
-            //}
-            //else
-            //{
-            //    //TODO Error case
-            //}
         }
 
         public bool ValidateIPv4(string ipString)
