@@ -121,6 +121,12 @@
   <data name="failed" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\failed.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="icon_autolookup_round" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AutoLookup_Default_Icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icon_autolookup_square" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AutoLookup_Desktop_Icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="progress" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\progress.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

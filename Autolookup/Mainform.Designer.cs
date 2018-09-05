@@ -28,7 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Mainform));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button_BulkLookup = new System.Windows.Forms.Button();
             this.groupBox_results = new System.Windows.Forms.GroupBox();
             this.progressBar_singleLookup = new System.Windows.Forms.ProgressBar();
             this.tableLayoutPanel_singleLookup = new System.Windows.Forms.TableLayoutPanel();
@@ -67,6 +69,7 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.button_BulkLookup);
             this.groupBox1.Controls.Add(this.groupBox_results);
             this.groupBox1.Controls.Add(this.button_pasteIP);
             this.groupBox1.Controls.Add(this.button_pasteFQDN);
@@ -86,6 +89,16 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Lookup";
             // 
+            // button_BulkLookup
+            // 
+            this.button_BulkLookup.Location = new System.Drawing.Point(7, 205);
+            this.button_BulkLookup.Name = "button_BulkLookup";
+            this.button_BulkLookup.Size = new System.Drawing.Size(160, 51);
+            this.button_BulkLookup.TabIndex = 9;
+            this.button_BulkLookup.Text = "Bulk Lookup";
+            this.button_BulkLookup.UseVisualStyleBackColor = true;
+            this.button_BulkLookup.Click += new System.EventHandler(this.button_BulkLookup_Click);
+            // 
             // groupBox_results
             // 
             this.groupBox_results.Controls.Add(this.progressBar_singleLookup);
@@ -103,9 +116,10 @@
             // 
             this.progressBar_singleLookup.Location = new System.Drawing.Point(8, 40);
             this.progressBar_singleLookup.Margin = new System.Windows.Forms.Padding(4);
-            this.progressBar_singleLookup.Maximum = 9;
+            this.progressBar_singleLookup.Maximum = 10;
             this.progressBar_singleLookup.Name = "progressBar_singleLookup";
             this.progressBar_singleLookup.Size = new System.Drawing.Size(1140, 46);
+            this.progressBar_singleLookup.Step = 1;
             this.progressBar_singleLookup.TabIndex = 1;
             // 
             // tableLayoutPanel_singleLookup
@@ -382,7 +396,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1208, 642);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4);
+            this.MaximizeBox = false;
             this.Name = "Mainform";
             this.Text = "AutoLookup";
             this.groupBox1.ResumeLayout(false);
@@ -426,6 +443,7 @@
         private System.Windows.Forms.PictureBox pictureBox_lookup;
         private System.Windows.Forms.PictureBox pictureBox_reverseLookup;
         private System.Windows.Forms.Button button_ClearCancel;
+        private System.Windows.Forms.Button button_BulkLookup;
     }
 }
 

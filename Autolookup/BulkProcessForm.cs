@@ -16,5 +16,10 @@ namespace AutoLookup
         {
             InitializeComponent();
         }
+
+        private void BulkProcessForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

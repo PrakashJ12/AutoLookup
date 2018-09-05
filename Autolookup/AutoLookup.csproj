@@ -49,6 +49,9 @@
   <PropertyGroup>
     <StartupObject>AutoLookup.Program</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>AutoLookup_Desktop_Icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -127,6 +130,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\progress.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AutoLookup_Default_Icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AutoLookup_Desktop_Icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="AutoLookup_Desktop_Icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

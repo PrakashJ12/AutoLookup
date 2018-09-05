@@ -89,7 +89,10 @@ namespace AutoLookup
         private void Reverse_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             if (!backgroundWorker_ReverseLookup.CancellationPending)
+            {
                 label_resultReverse.Text = "Attempt: " + e.ProgressPercentage;
+                progressBar_singleLookup.Value = 6 + e.ProgressPercentage;
+            }
         }
 
         private void Reverse_Completed(object sender, RunWorkerCompletedEventArgs e)
@@ -104,6 +107,7 @@ namespace AutoLookup
                 {
                     pictureBox_reverseLookup.Image = Resources.failed;
                 }
+                progressBar_singleLookup.Value = 10;
                 tempDisableCopy = false;
             }
         }
@@ -111,14 +115,31 @@ namespace AutoLookup
         [STAThread]
         static bool Reverse(string ip, string fqdn)
         {
-            IPHostEntry ipEntry = Dns.GetHostEntry(ip);
-
-            if (ipEntry.HostName.Equals(fqdn))
+            try
             {
-                return true;
-            }
+                IPHostEntry ipEntry = Dns.GetHostEntry(ip);
 
-            return false;
+                if (ipEntry.HostName.Equals(fqdn))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            catch (System.Net.Sockets.SocketException se)
+            {
+                // The system had problems resolving the address passed
+                Console.WriteLine(se.Message.ToString());
+                return false;
+
+            }
+            catch (System.FormatException fe)
+            {
+                // Non unicode chars were probably passed 
+                Console.WriteLine(fe.Message.ToString());
+                return false;
+
+            }
         }
 
         private void Lookup_DoWork(object sender, DoWorkEventArgs e)
@@ -128,8 +149,8 @@ namespace AutoLookup
             lookupSuccess = false;
             do
             {
-                backgroundWorker_Lookup.ReportProgress(pingAttempt);
                 lookupSuccess = Lookup(textBox_FQDN.Text, textBox_IP.Text);
+                backgroundWorker_Lookup.ReportProgress(pingAttempt);
                 pingAttempt++;
             } while (pingAttempt < 4 && lookupSuccess == false && !backgroundWorker_Lookup.CancellationPending);
 
@@ -139,7 +160,11 @@ namespace AutoLookup
         private void Lookup_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             if (!backgroundWorker_Lookup.CancellationPending)
+            {
                 label_resultLookup.Text = "Attempt: " + e.ProgressPercentage;
+                progressBar_singleLookup.Value = 3 + e.ProgressPercentage;
+            }
+            
         }
 
         private void Lookup_Completed(object sender, RunWorkerCompletedEventArgs e)
@@ -226,8 +251,8 @@ namespace AutoLookup
             pingSuccess = false;
             do
             {
-                backgroundWorker_Ping.ReportProgress(pingAttempt);
                 pingSuccess = doPing(textBox_FQDN.Text, defaultTimout * pingAttempt);
+                backgroundWorker_Ping.ReportProgress(pingAttempt);
                 pingAttempt++;
             } while (pingAttempt < 4 && pingSuccess == false && !backgroundWorker_Ping.CancellationPending);
 
@@ -262,8 +287,12 @@ namespace AutoLookup
 
         private void Ping_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            if (!backgroundWorker_Ping.CancellationPending)
+            if (!backgroundWorker_Ping.CancellationPending) {
                 label_resultPing.Text = "Ping: " + e.ProgressPercentage;
+                progressBar_singleLookup.Value = e.ProgressPercentage;
+            }
+            
+
         }
 
         private void cbm_NewUrl(string clipboardText)
@@ -363,6 +392,11 @@ namespace AutoLookup
 
         private void button_ClearCancel_Click(object sender, EventArgs e)
         {
+            clearCancelLookup();
+        }
+
+        private void clearCancelLookup()
+        {
             backgroundWorker_Ping.CancelAsync();
             backgroundWorker_Lookup.CancelAsync();
             backgroundWorker_ReverseLookup.CancelAsync();
@@ -379,24 +413,20 @@ namespace AutoLookup
             label_resultReverse.Text = "";
 
             tempDisableCopy = false;
+
+            progressBar_singleLookup.Value = 0;
         }
 
         private void textBox_FQDN_TextChanged(object sender, EventArgs e)
         {
-            backgroundWorker_Ping.CancelAsync();
-            backgroundWorker_Lookup.CancelAsync();
-            backgroundWorker_ReverseLookup.CancelAsync();
+            clearCancelLookup();
+        }
 
-            pictureBox_lookup.Image = null;
-            pictureBox_reverseLookup.Image = null;
-            pictureBox_ping.Image = null;
-
-            //textBox_IP.Text = "";
-            //textBox_FQDN.Text = "";
-
-            label_resultPing.Text = "";
-            label_resultLookup.Text = "";
-            label_resultReverse.Text = "";
+        private void button_BulkLookup_Click(object sender, EventArgs e)
+        {
+            BulkProcessForm bulkProcessForm = new BulkProcessForm();
+            this.Hide();
+            bulkProcessForm.Show();
         }
     }
 
