@@ -428,6 +428,11 @@ namespace AutoLookup
             this.Hide();
             bulkProcessForm.Show();
         }
+
+        private void button_OpenSource_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/PrakashJ12/AutoLookup");
+        }
     }
 
     public class ClipBoardMonitor : NativeWindow

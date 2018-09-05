@@ -55,6 +55,7 @@
             this.checkBox_onTop = new System.Windows.Forms.CheckBox();
             this.checkBox_AutoLookup = new System.Windows.Forms.CheckBox();
             this.checkBox_Autocopy = new System.Windows.Forms.CheckBox();
+            this.button_OpenSource = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox_results.SuspendLayout();
             this.tableLayoutPanel_singleLookup.SuspendLayout();
@@ -69,6 +70,7 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.button_OpenSource);
             this.groupBox1.Controls.Add(this.button_BulkLookup);
             this.groupBox1.Controls.Add(this.groupBox_results);
             this.groupBox1.Controls.Add(this.button_pasteIP);
@@ -390,6 +392,17 @@
             this.checkBox_Autocopy.Text = "Autocopy";
             this.checkBox_Autocopy.UseVisualStyleBackColor = true;
             // 
+            // button_OpenSource
+            // 
+            this.button_OpenSource.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_OpenSource.Location = new System.Drawing.Point(192, 205);
+            this.button_OpenSource.Name = "button_OpenSource";
+            this.button_OpenSource.Size = new System.Drawing.Size(180, 50);
+            this.button_OpenSource.TabIndex = 10;
+            this.button_OpenSource.Text = "Open Source";
+            this.button_OpenSource.UseVisualStyleBackColor = true;
+            this.button_OpenSource.Click += new System.EventHandler(this.button_OpenSource_Click);
+            // 
             // Mainform
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
@@ -444,6 +457,7 @@
         private System.Windows.Forms.PictureBox pictureBox_reverseLookup;
         private System.Windows.Forms.Button button_ClearCancel;
         private System.Windows.Forms.Button button_BulkLookup;
+        private System.Windows.Forms.Button button_OpenSource;
     }
 }
 
